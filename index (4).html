@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCTI Handover Tracker</title>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --blue-dark:#1F4E79;--blue-mid:#2E75B6;--blue-pale:#EBF4FB;
+  --green:#375623;--green-light:#EAF3DE;
+  --amber:#7F6000;--amber-light:#FFF2CC;
+  --red:#A32D2D;--red-light:#FCEBEB;
+  --gray-900:#1C1C1C;--gray-700:#404040;--gray-500:#6B6B6B;
+  --gray-300:#C8C8C8;--gray-100:#F4F4F4;--gray-50:#FAFAFA;--white:#FFFFFF;
+  --r-sm:6px;--r-md:8px;--r-lg:12px;
+  --sh-sm:0 1px 3px rgba(0,0,0,.08);--sh-md:0 4px 16px rgba(0,0,0,.10);
+}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#F0F4F8;color:var(--gray-900);min-height:100vh;font-size:14px;line-height:1.5;}
+/* TOPBAR */
+.topbar{background:var(--blue-dark);padding:0 1.5rem;display:flex;align-items:center;justify-content:space-between;height:54px;position:sticky;top:0;z-index:50;}
+.tb-brand{display:flex;align-items:center;gap:10px;}
+.tb-logo{width:30px;height:30px;background:var(--blue-mid);border-radius:var(--r-sm);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.tb-title{font-size:14px;font-weight:600;color:#fff;}
+.tb-sub{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px;}
+.tb-actions{display:flex;gap:6px;}
+.btn-ghost{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;border-radius:var(--r-sm);padding:5px 12px;font-size:12px;cursor:pointer;display:flex;align-items:center;gap:4px;transition:background .15s;}
+.btn-ghost:hover{background:rgba(255,255,255,.2);}
+/* LAYOUT */
+.shell{display:flex;min-height:calc(100vh - 54px);}
+/* SIDEBAR */
+.sidebar{width:210px;flex-shrink:0;background:var(--white);border-right:1px solid #E2E8EF;padding:1rem 0;position:sticky;top:54px;height:calc(100vh - 54px);overflow-y:auto;display:flex;flex-direction:column;}
+.sb-section{padding:0 .75rem;margin-bottom:1rem;}
+.sb-label{font-size:10px;font-weight:600;letter-spacing:.6px;text-transform:uppercase;color:var(--gray-500);margin-bottom:5px;padding:0 6px;}
+.nav-item{display:flex;align-items:center;gap:7px;padding:6px 8px;border-radius:var(--r-sm);cursor:pointer;transition:background .12s;font-size:12px;color:var(--gray-700);border:none;background:transparent;width:100%;text-align:left;}
+.nav-item:hover{background:var(--gray-100);}
+.nav-item.active{background:var(--blue-pale);color:var(--blue-dark);font-weight:500;}
+.nav-icon{width:22px;height:22px;border-radius:4px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:12px;}
+.nav-pct{margin-left:auto;font-size:10px;font-weight:600;padding:1px 5px;border-radius:10px;}
+.pct-0{background:var(--gray-100);color:var(--gray-500);}
+.pct-low{background:var(--red-light);color:var(--red);}
+.pct-mid{background:var(--amber-light);color:var(--amber);}
+.pct-high{background:var(--green-light);color:var(--green);}
+.nav-add{display:flex;align-items:center;gap:5px;padding:5px 8px;font-size:12px;color:var(--blue-mid);cursor:pointer;border:none;background:transparent;width:100%;border-radius:var(--r-sm);transition:background .12s;}
+.nav-add:hover{background:var(--blue-pale);}
+.sb-footer{margin-top:auto;padding:.75rem;border-top:1px solid #F0F0F0;}
+/* MAIN */
+.main{flex:1;padding:1.25rem 1.5rem 3rem;min-width:0;}
+/* STATS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:1.25rem;}
+.stat-card{background:var(--white);border:1px solid #E2E8EF;border-radius:var(--r-md);padding:12px 14px;box-shadow:var(--sh-sm);}
+.stat-label{font-size:11px;color:var(--gray-500);font-weight:500;margin-bottom:3px;}
+.stat-value{font-size:24px;font-weight:700;line-height:1;}
+.stat-sub{font-size:11px;color:var(--gray-500);margin-top:3px;}
+/* PROGRESS STRIP */
+.prog-strip{background:var(--white);border:1px solid #E2E8EF;border-radius:var(--r-md);padding:12px 14px;margin-bottom:1.25rem;box-shadow:var(--sh-sm);display:flex;align-items:center;gap:12px;}
+.prog-label{font-size:12px;color:var(--gray-500);white-space:nowrap;}
+.prog-track{flex:1;height:7px;background:var(--gray-100);border-radius:4px;overflow:hidden;}
+.prog-fill{height:100%;border-radius:4px;background:var(--blue-mid);transition:width .4s;}
+.prog-pct{font-size:13px;font-weight:600;color:var(--gray-900);min-width:34px;text-align:right;}
+/* OVERVIEW */
+.ov-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:12px;margin-top:1.25rem;}
+.ov-card{background:var(--white);border:1px solid #E2E8EF;border-radius:var(--r-lg);padding:.9rem 1rem;box-shadow:var(--sh-sm);cursor:pointer;transition:box-shadow .15s,transform .15s;}
+.ov-card:hover{box-shadow:var(--sh-md);transform:translateY(-1px);}
+.ov-head{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.ov-name{font-size:13px;font-weight:600;color:var(--gray-900);}
+.ov-pct{font-size:11px;font-weight:600;margin-left:auto;padding:2px 7px;border-radius:10px;}
+.ov-bar{height:5px;background:var(--gray-100);border-radius:3px;overflow:hidden;margin-bottom:8px;}
+.ov-bar-fill{height:100%;border-radius:3px;background:var(--blue-mid);}
+.ov-cats{display:flex;flex-direction:column;gap:4px;}
+.ov-cat-row{display:flex;align-items:center;gap:5px;}
+.ov-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+.dot-todo{background:var(--gray-300);}.dot-ip{background:#D4A017;}.dot-done{background:var(--green);}
+.ov-cat-name{font-size:11px;color:var(--gray-500);flex:1;}
+.ov-cat-ct{font-size:10px;color:var(--gray-500);}
+/* SECTOR */
+.sec-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:1rem;gap:10px;flex-wrap:wrap;}
+.sec-title-wrap{display:flex;align-items:center;gap:10px;}
+.sec-badge{width:40px;height:40px;border-radius:var(--r-md);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.sec-name{font-size:19px;font-weight:700;}
+.sec-meta{font-size:12px;color:var(--gray-500);margin-top:1px;}
+.btn-danger{background:transparent;color:var(--red);border:1px solid var(--red-light);border-radius:var(--r-sm);padding:6px 12px;font-size:12px;cursor:pointer;transition:background .15s;}
+.btn-danger:hover{background:var(--red-light);}
+/* CATEGORY */
+.cat-block{background:var(--white);border:1px solid #E2E8EF;border-radius:var(--r-lg);margin-bottom:12px;box-shadow:var(--sh-sm);overflow:hidden;}
+.cat-head{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #F0F0F0;background:var(--gray-50);}
+.cat-name{font-size:11px;font-weight:600;color:var(--gray-700);text-transform:uppercase;letter-spacing:.4px;}
+.cat-pbar{flex:1;max-width:90px;height:4px;background:var(--gray-100);border-radius:3px;overflow:hidden;margin:0 10px;}
+.cat-pfill{height:100%;border-radius:3px;background:var(--blue-mid);}
+.cat-ct{font-size:11px;color:var(--gray-500);}
+.btn-del-cat{background:transparent;border:none;color:var(--gray-300);cursor:pointer;font-size:13px;padding:2px 5px;border-radius:4px;transition:color .12s;margin-left:6px;}
+.btn-del-cat:hover{color:var(--red);}
+/* TOPIC ROW */
+.topic-row{display:flex;align-items:flex-start;gap:9px;padding:9px 14px;border-bottom:1px solid #F5F5F5;transition:background .1s;}
+.topic-row:last-of-type{border-bottom:none;}
+.topic-row:hover{background:var(--gray-50);}
+.status-btn{width:19px;height:19px;border-radius:4px;flex-shrink:0;cursor:pointer;border:1.5px solid var(--gray-300);display:flex;align-items:center;justify-content:center;transition:all .15s;margin-top:1px;background:transparent;font-size:11px;font-weight:700;}
+.status-btn.todo{border-color:var(--gray-300);color:transparent;}
+.status-btn.inprogress{border-color:#D4A017;background:#FFF8E1;color:#D4A017;}
+.status-btn.done{border-color:var(--green);background:var(--green-light);color:var(--green);}
+.topic-body{flex:1;min-width:0;}
+.topic-text{font-size:13px;color:var(--gray-900);line-height:1.4;}
+.topic-text.done{text-decoration:line-through;color:var(--gray-500);}
+.topic-chips{display:flex;gap:4px;margin-top:4px;flex-wrap:wrap;}
+.chip{font-size:10px;font-weight:600;padding:1px 7px;border-radius:10px;}
+.chip-todo{background:var(--gray-100);color:var(--gray-500);}
+.chip-ip{background:#FFF3CD;color:#856404;}
+.chip-done{background:var(--green-light);color:var(--green);}
+.chip-note{background:var(--blue-pale);color:var(--blue-mid);}
+.topic-note{margin-top:6px;padding:6px 9px;background:var(--blue-pale);border-left:3px solid var(--blue-mid);border-radius:0 var(--r-sm) var(--r-sm) 0;font-size:12px;color:var(--gray-700);}
+.note-input{margin-top:6px;width:100%;padding:6px 9px;font-size:12px;border:1px solid var(--gray-300);border-radius:var(--r-sm);font-family:inherit;resize:vertical;color:var(--gray-900);background:var(--white);outline:none;transition:border-color .15s;}
+.note-input:focus{border-color:var(--blue-mid);}
+.topic-actions{display:flex;gap:2px;flex-shrink:0;}
+.icon-btn{background:transparent;border:none;padding:3px 4px;border-radius:var(--r-sm);cursor:pointer;color:var(--gray-300);font-size:13px;line-height:1;transition:color .12s,background .12s;display:flex;align-items:center;}
+.icon-btn:hover{color:var(--gray-700);background:var(--gray-100);}
+.icon-btn.danger:hover{color:var(--red);background:var(--red-light);}
+/* ADD ROW */
+.add-row{display:flex;gap:7px;padding:9px 14px;background:var(--gray-50);border-top:1px dashed #DDE3EA;align-items:center;flex-wrap:wrap;}
+.add-input{flex:1;min-width:150px;padding:6px 9px;font-size:12px;border:1px solid var(--gray-300);border-radius:var(--r-sm);font-family:inherit;background:var(--white);color:var(--gray-900);outline:none;transition:border-color .15s;}
+.add-input:focus{border-color:var(--blue-mid);}
+.add-select{padding:6px 8px;font-size:12px;border:1px solid var(--gray-300);border-radius:var(--r-sm);background:var(--white);color:var(--gray-900);outline:none;cursor:pointer;}
+.btn-add{padding:6px 12px;background:var(--blue-dark);color:#fff;border:none;border-radius:var(--r-sm);font-size:12px;font-weight:500;cursor:pointer;display:flex;align-items:center;gap:4px;white-space:nowrap;transition:background .15s;}
+.btn-add:hover{background:var(--blue-mid);}
+.add-cat-row{display:flex;gap:7px;padding:10px 0;align-items:center;flex-wrap:wrap;border-top:1px dashed #DDE3EA;margin-top:4px;}
+/* MODAL */
+.modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:200;align-items:center;justify-content:center;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--white);border-radius:var(--r-lg);padding:1.25rem;width:320px;max-width:94%;box-shadow:var(--sh-md);}
+.modal-title{font-size:14px;font-weight:600;margin-bottom:12px;}
+.modal-input{width:100%;padding:8px 10px;font-size:13px;border:1px solid var(--gray-300);border-radius:var(--r-sm);font-family:inherit;color:var(--gray-900);background:var(--white);outline:none;margin-bottom:8px;transition:border-color .15s;}
+.modal-input:focus{border-color:var(--blue-mid);}
+.modal-footer{display:flex;gap:7px;justify-content:flex-end;margin-top:4px;}
+.btn-cancel{padding:7px 14px;background:transparent;border:1px solid var(--gray-300);border-radius:var(--r-sm);font-size:12px;cursor:pointer;color:var(--gray-700);transition:background .15s;}
+.btn-cancel:hover{background:var(--gray-100);}
+/* CALENDAR */
+.cal-wrapper{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:14px;}
+.cal-month{background:var(--white);border:1px solid #E2E8EF;border-radius:var(--r-lg);padding:14px;box-shadow:var(--sh-sm);}
+.cal-month-name{font-size:13px;font-weight:700;color:var(--blue-dark);margin-bottom:10px;text-align:center;}
+.cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.cal-day-label{font-size:10px;font-weight:600;color:var(--gray-500);text-align:center;padding:2px 0;}
+.cal-cell{border-radius:4px;border:1px solid transparent;aspect-ratio:1;display:flex;align-items:center;justify-content:center;}
+.cal-cell.cal-empty{background:transparent!important;border-color:transparent!important;}
+.cal-num{font-size:11px;font-weight:600;}
+.leg-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:1.25rem;padding:10px 12px;background:var(--white);border:1px solid #E2E8EF;border-radius:var(--r-md);}
+.leg-item{display:flex;align-items:center;gap:4px;}
+.leg-dot{width:13px;height:13px;border-radius:3px;flex-shrink:0;}
+/* PRINT */
+@media print{.topbar,.sidebar,.btn-add,.btn-danger,.icon-btn,.add-row,.add-cat-row,.btn-ghost,.modal-overlay{display:none!important;}body{background:#fff;}.shell{display:block;}.main{padding:0;}}
+@media(max-width:600px){.sidebar{display:none;}.main{padding:.75rem;}.topbar{padding:0 .75rem;}}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="tb-brand">
+    <div class="tb-logo">📋</div>
+    <div>
+      <div class="tb-title">TCTI Handover Tracker</div>
+      <div class="tb-sub">Exit phase 2026–2028 · GIZ / SDC</div>
+    </div>
+  </div>
+  <div class="tb-actions">
+    <button class="btn-ghost" onclick="window.print()">🖨 Print</button>
+    <button class="btn-ghost" onclick="exportJSON()">⬇ Export</button>
+    <button class="btn-ghost" onclick="document.getElementById('import-file').click()">⬆ Import</button>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="sidebar" id="sidebar"></nav>
+  <main class="main" id="main"></main>
+</div>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">Add new sector</div>
+    <input class="modal-input" id="modal-input" placeholder="Sector name" onkeydown="if(event.key==='Enter')confirmAddSector()">
+    <div class="modal-footer">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-add" onclick="confirmAddSector()">＋ Add</button>
+    </div>
+  </div>
+</div>
+
+<input type="file" id="import-file" accept=".json" style="display:none" onchange="handleImport(event)">
+
+<script>
+const SECTOR_COLORS=[
+  {bg:'#EBF4FB',icon:'#1F4E79'},{bg:'#EAF3DE',icon:'#3B6D11'},
+  {bg:'#FAEEDA',icon:'#854F0B'},{bg:'#FAECE7',icon:'#993C1D'},
+  {bg:'#EEEDFE',icon:'#534AB7'},{bg:'#E1F5EE',icon:'#0F6E56'},
+  {bg:'#FBEAF0',icon:'#993556'},{bg:'#F1EFE8',icon:'#5F5E5A'},
+];
+const SECTOR_EMOJIS=['🏨','🏗','🪵','🍞','👗','🚛','💻','🤝','🏥','🎓','📢'];
+
+// ── SEED DATA (live export 2026-06-10) ──────────────────────────────
+const SEED_DATA = {"active": "id2077", "sectors": [{"id": "s1", "name": "Tourism", "emoji": "\ud83c\udfe8", "color": {"bg": "#EBF4FB", "icon": "#1F4E79"}, "categories": [{"id": "c1", "name": "Institutional handover", "topics": [{"id": "t1", "text": "MoU with ETF", "status": "inprogress", "notes": "", "expanded": false}, {"id": "t2", "text": "Sector competence development strategy", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2009", "text": "upload in core", "status": "todo", "notes": "", "expanded": false}]}, {"id": "c2", "name": "Short-term trainings", "topics": [{"id": "t3", "text": "Training calendar finalised with MoETE", "status": "todo", "notes": "", "expanded": false}, {"id": "t4", "text": "Trainer handover sessions completed", "status": "todo", "notes": "", "expanded": false}, {"id": "t5", "text": "Training materials transferred to counterpart", "status": "todo", "notes": "", "expanded": false}, {"id": "id2010", "text": "photos", "status": "todo", "notes": "", "expanded": false}, {"id": "id2085", "text": "upload in core", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2088", "name": "integration in TELM activities", "topics": [{"id": "id2089", "text": "handover of ETF MoU and SCDS to TCTI 2 colleagues", "status": "done", "notes": "", "expanded": false}, {"id": "id2090", "text": "integration of RPL Bleeker documents in TCTI 2 activities", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2091", "text": "roadmap for PS integration in tourism", "status": "inprogress", "notes": "", "expanded": false}]}, {"id": "id2110", "name": "uploaded in core", "topics": []}]}, {"id": "s2", "name": "Construction", "emoji": "\ud83c\udfd7", "color": {"bg": "#EAF3DE", "icon": "#3B6D11"}, "categories": [{"id": "c3", "name": "Institutional handover", "topics": [{"id": "t7", "text": "Sector competence development strategy", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2008", "text": "MoU ABA/Arab Contractors", "status": "todo", "notes": "", "expanded": false}]}, {"id": "c4", "name": "Short-term trainings", "topics": [{"id": "t8", "text": "Training calendar finalised with MoETE", "status": "done", "notes": "", "expanded": false}, {"id": "t9", "text": "Trainer handover sessions completed", "status": "done", "notes": "", "expanded": false}, {"id": "t10", "text": "Training materials transferred to counterpart", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2106", "name": "internal GIZ handover", "topics": [{"id": "id2107", "text": "initial conversation with CBUID", "status": "done", "notes": "", "expanded": false}, {"id": "id2108", "text": "follow up with Monica and CBUID team on contacts and entry points", "status": "inprogress", "notes": "", "expanded": false}]}, {"id": "id2111", "name": "uploaded in core", "topics": []}]}, {"id": "s3", "name": "Woodworking", "emoji": "\ud83e\udeb5", "color": {"bg": "#FAEEDA", "icon": "#854F0B"}, "categories": [{"id": "c5", "name": "Institutional handover", "topics": [{"id": "t12", "text": "Sector competence development strategy", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2007", "text": "MoU with CWWFI", "status": "inprogress", "notes": "", "expanded": false}]}, {"id": "c6", "name": "Short-term trainings", "topics": [{"id": "t13", "text": "Training calendar finalised with MoETE", "status": "done", "notes": "", "expanded": false}, {"id": "t14", "text": "Trainer handover sessions completed", "status": "done", "notes": "", "expanded": false}, {"id": "id2094", "text": "training materials handed over to partners", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2112", "name": "uploaded in core", "topics": []}]}, {"id": "s4", "name": "Food processing", "emoji": "\ud83c\udf5e", "color": {"bg": "#FAECE7", "icon": "#993C1D"}, "categories": [{"id": "c7", "name": "Institutional handover", "topics": [{"id": "t16", "text": "Sector competence development strategy", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2006", "text": "MoU with CFI", "status": "inprogress", "notes": "", "expanded": false}]}, {"id": "c8", "name": "Short-term trainings", "topics": [{"id": "t17", "text": "Training calendar finalised with MoETE", "status": "done", "notes": "", "expanded": false}, {"id": "t18", "text": "Trainer handover sessions completed", "status": "done", "notes": "", "expanded": false}, {"id": "id2095", "text": "training materials handed over to partners", "status": "inprogress", "notes": "", "expanded": false}]}, {"id": "id2113", "name": "uploaded in core", "topics": []}]}, {"id": "id2000", "name": "TVETA", "emoji": "\ud83d\udc57", "color": {"bg": "#EEEDFE", "icon": "#534AB7"}, "categories": [{"id": "id2096", "name": "review documents uploaded in sharepoint with Menna", "topics": [{"id": "id2097", "text": "documents revised and to be reviewed", "status": "inprogress", "notes": "", "expanded": false}]}, {"id": "id2109", "name": "uploaded in core", "topics": []}]}, {"id": "id2011", "name": "grassroots engagement", "emoji": "\ud83d\ude9b", "color": {"bg": "#E1F5EE", "icon": "#0F6E56"}, "categories": [{"id": "id2012", "name": "Institutional handover", "topics": [{"id": "id2017", "text": "assessment report", "status": "todo", "notes": "", "expanded": false}, {"id": "id2018", "text": "grassroots engagement manual", "status": "todo", "notes": "", "expanded": false}, {"id": "id2019", "text": "raw graphics for GTA", "status": "todo", "notes": "", "expanded": false}, {"id": "id2020", "text": "photos from events", "status": "todo", "notes": "", "expanded": false}, {"id": "id2021", "text": "upload all in CORE", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2092", "name": "integration of grassroots findings in EPP", "topics": [{"id": "id2093", "text": "sharing of documents and presentation to team", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2114", "name": "uploaded in core", "topics": []}]}, {"id": "id2022", "name": "Database", "emoji": "\ud83d\udcbb", "color": {"bg": "#FBEAF0", "icon": "#993556"}, "categories": [{"id": "id2028", "name": "tourism sector companies", "topics": []}, {"id": "id2029", "name": "construction sector companies", "topics": []}, {"id": "id2030", "name": "wood working sector companies", "topics": []}, {"id": "id2031", "name": "food processing companies", "topics": []}, {"id": "id2115", "name": "governance system within GIZ", "topics": []}]}, {"id": "id2032", "name": "renovation", "emoji": "\ud83e\udd1d", "color": {"bg": "#F1EFE8", "icon": "#5F5E5A"}, "categories": [{"id": "id2038", "name": "Alexandria Thalaat Harb", "topics": [{"id": "id2043", "text": "final report", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2048", "text": "preparation phase", "status": "todo", "notes": "", "expanded": false}, {"id": "id2069", "text": "implementation phase", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2039", "name": "Beheira el Bayda school", "topics": [{"id": "id2044", "text": "final report", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2049", "text": "preparation phase", "status": "todo", "notes": "", "expanded": false}, {"id": "id2068", "text": "implementation phase", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2040", "name": "Damietta New Damietta Military school", "topics": [{"id": "id2045", "text": "final report", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2050", "text": "preparation phase", "status": "todo", "notes": "", "expanded": false}, {"id": "id2067", "text": "implementation phase", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2041", "name": "Hurghada Ahmed Orabi school", "topics": [{"id": "id2046", "text": "final report", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2051", "text": "preparation phase", "status": "todo", "notes": "", "expanded": false}, {"id": "id2066", "text": "implementation phase", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2042", "name": "overall procurement report", "topics": [{"id": "id2047", "text": "final report", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2065", "text": "uploaded in Core", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2116", "name": "uploaded in core", "topics": []}]}, {"id": "id2053", "name": "invoices", "emoji": "\ud83c\udfe5", "color": {"bg": "#EBF4FB", "icon": "#1F4E79"}, "categories": [{"id": "id2099", "name": "ICON 1 invoices uploaded", "topics": [{"id": "id2101", "text": "invoices paid", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2100", "name": "ICON 2 invoices uploaded", "topics": [{"id": "id2102", "text": "invoices pai", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2103", "name": "GZK Bleeker invoice", "topics": []}, {"id": "id2117", "name": "uploaded in core", "topics": []}]}, {"id": "id2059", "name": "reporting", "emoji": "\ud83c\udf93", "color": {"bg": "#EAF3DE", "icon": "#3B6D11"}, "categories": [{"id": "id2070", "name": "BMZ reporting", "topics": [{"id": "id2104", "text": "draft developed", "status": "inprogress", "notes": "", "expanded": false}, {"id": "id2105", "text": "reviewed and finalised", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2071", "name": "SDC reporting", "topics": []}, {"id": "id2072", "name": "MoETE reporting", "topics": []}, {"id": "id2073", "name": "ICON progress reports catalogue", "topics": [{"id": "id2074", "text": "ICON final report", "status": "todo", "notes": "", "expanded": false}, {"id": "id2075", "text": "reviewed", "status": "todo", "notes": "", "expanded": false}, {"id": "id2076", "text": "uploaded with feedback in Core", "status": "todo", "notes": "", "expanded": false}]}, {"id": "id2118", "name": "uploaded in core", "topics": []}]}, {"id": "id2077", "name": "communication", "emoji": "\ud83c\udfe8", "color": {"bg": "#FAEEDA", "icon": "#854F0B"}, "categories": [{"id": "id2083", "name": "posts for linkedin", "topics": []}, {"id": "id2084", "name": "posts for facebook", "topics": []}, {"id": "id2119", "name": "uploaded in core", "topics": []}]}]};
+
+let nid=3000;
+function uid(){return 'id'+(nid++);}
+function loadState(){try{const d=localStorage.getItem('tcti_v3');return d?JSON.parse(d):null;}catch(e){return null;}}
+function saveState(){try{localStorage.setItem('tcti_v3',JSON.stringify(state));}catch(e){}}
+
+let state=loadState()||JSON.parse(JSON.stringify(SEED_DATA));
+
+function allTopics(){let a=[];state.sectors.forEach(s=>s.categories.forEach(c=>c.topics.forEach(t=>a.push(t))));return a;}
+function sectorTopics(s){let a=[];s.categories.forEach(c=>c.topics.forEach(t=>a.push(t)));return a;}
+function sectorPct(s){const t=sectorTopics(s);if(!t.length)return 0;return Math.round(t.filter(x=>x.status==='done').length/t.length*100);}
+function pctClass(p){return p===0?'pct-0':p<40?'pct-low':p<80?'pct-mid':'pct-high';}
+function pctBg(p){return p===0?'#F4F4F4':p<40?'#FCEBEB':p<80?'#FFF2CC':'#EAF3DE';}
+function pctColor(p){return p===0?'#6B6B6B':p<40?'#A32D2D':p<80?'#7F6000':'#375623';}
+function statusIcon(s){return s==='done'?'✓':s==='inprogress'?'–':'';}
+function statusChip(s){return s==='done'?'chip-done':s==='inprogress'?'chip-ip':'chip-todo';}
+function statusLabel(s){return s==='done'?'Done':s==='inprogress'?'In progress':'To do';}
+function nextStatus(s){return s==='todo'?'inprogress':s==='inprogress'?'done':'todo';}
+function getSector(id){return state.sectors.find(s=>s.id===id);}
+function getCat(sid,cid){return getSector(sid).categories.find(c=>c.id===cid);}
+function getTopic(sid,cid,tid){return getCat(sid,cid).topics.find(t=>t.id===tid);}
+function esc(s){const d=document.createElement('div');d.textContent=s;return d.innerHTML;}
+
+function render(){saveState();renderSidebar();renderMain();}
+
+function renderSidebar(){
+  const all=allTopics(),done=all.filter(t=>t.status==='done').length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  let h=`<div class="sb-section"><div class="sb-label">Views</div>
+    <button class="nav-item ${state.active==='overview'?'active':''}" onclick="setActive('overview')">
+      <span style="font-size:14px">📊</span> Overview
+    </button>
+    <button class="nav-item ${state.active==='calendar'?'active':''}" onclick="setActive('calendar')">
+      <span style="font-size:14px">📅</span> Transition Calendar
+    </button></div>
+    <div class="sb-section"><div class="sb-label">Sectors</div>`;
+  state.sectors.forEach(s=>{
+    const p=sectorPct(s);
+    h+=`<button class="nav-item ${state.active===s.id?'active':''}" onclick="setActive('${s.id}')">
+      <span class="nav-icon" style="background:${s.color.bg}">${s.emoji}</span>
+      <span style="flex:1;text-align:left;font-size:12px">${esc(s.name)}</span>
+      <span class="nav-pct ${pctClass(p)}">${p}%</span>
+    </button>`;
+  });
+  h+=`<button class="nav-add" onclick="openModal()">＋ Add sector</button></div>
+  <div class="sb-footer">
+    <div style="font-size:11px;color:#6B6B6B">
+      <div style="font-weight:600;margin-bottom:4px">Overall progress</div>
+      <div style="display:flex;align-items:center;gap:8px">
+        <div style="flex:1;height:5px;background:#F4F4F4;border-radius:3px;overflow:hidden">
+          <div style="height:100%;width:${pct}%;background:#2E75B6;border-radius:3px;transition:width .4s"></div>
+        </div>
+        <span style="font-weight:600;color:#1C1C1C">${pct}%</span>
+      </div>
+    </div>
+  </div>`;
+  document.getElementById('sidebar').innerHTML=h;
+}
+
+function renderMain(){
+  if(state.active==='overview') renderOverview();
+  else if(state.active==='calendar') renderCalendar();
+  else renderSector(state.active);
+}
+
+function renderOverview(){
+  const all=allTopics();
+  const done=all.filter(t=>t.status==='done').length;
+  const ip=all.filter(t=>t.status==='inprogress').length;
+  const todo=all.filter(t=>t.status==='todo').length;
+  const pct=all.length?Math.round(done/all.length*100):0;
+  const cards=state.sectors.map(s=>{
+    const p=sectorPct(s);
+    const cats=s.categories.map(c=>{
+      const d=c.topics.filter(t=>t.status==='done').length;
+      const i=c.topics.filter(t=>t.status==='inprogress').length;
+      const dot=d===c.topics.length&&c.topics.length>0?'dot-done':i>0?'dot-ip':'dot-todo';
+      return `<div class="ov-cat-row"><span class="ov-dot ${dot}"></span><span class="ov-cat-name">${esc(c.name)}</span><span class="ov-cat-ct">${d}/${c.topics.length}</span></div>`;
+    }).join('');
+    return `<div class="ov-card" onclick="setActive('${s.id}')">
+      <div class="ov-head"><span style="font-size:20px">${s.emoji}</span><span class="ov-name">${esc(s.name)}</span>
+        <span class="ov-pct" style="background:${pctBg(p)};color:${pctColor(p)}">${p}%</span></div>
+      <div class="ov-bar"><div class="ov-bar-fill" style="width:${p}%"></div></div>
+      <div class="ov-cats">${cats}</div>
+    </div>`;
+  }).join('');
+  document.getElementById('main').innerHTML=`
+    <div style="margin-bottom:1.25rem">
+      <h1 style="font-size:20px;font-weight:700">Handover overview</h1>
+      <p style="font-size:12px;color:#6B6B6B;margin-top:2px">Track completion across all sectors and categories</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Total topics</div><div class="stat-value">${all.length}</div><div class="stat-sub">${state.sectors.length} sectors</div></div>
+      <div class="stat-card"><div class="stat-label">Completed</div><div class="stat-value" style="color:#375623">${done}</div><div class="stat-sub">${pct}% done</div></div>
+      <div class="stat-card"><div class="stat-label">In progress</div><div class="stat-value" style="color:#7F6000">${ip}</div><div class="stat-sub">underway</div></div>
+      <div class="stat-card"><div class="stat-label">Pending</div><div class="stat-value" style="color:#6B6B6B">${todo}</div><div class="stat-sub">not started</div></div>
+    </div>
+    <div class="prog-strip">
+      <span class="prog-label">Overall handover progress</span>
+      <div class="prog-track"><div class="prog-fill" style="width:${pct}%"></div></div>
+      <span class="prog-pct">${pct}%</span>
+    </div>
+    <div class="ov-grid">${cards}</div>`;
+}
+
+function renderSector(sid){
+  const s=getSector(sid);if(!s){renderOverview();return;}
+  const t=sectorTopics(s),done=t.filter(x=>x.status==='done').length,p=sectorPct(s);
+  const catsHtml=s.categories.map(c=>{
+    const cd=c.topics.filter(t=>t.status==='done').length;
+    const cp=c.topics.length?Math.round(cd/c.topics.length*100):0;
+    const rows=c.topics.map(t=>`
+      <div class="topic-row">
+        <button class="status-btn ${t.status==='inprogress'?'inprogress':t.status}" onclick="doToggle('${sid}','${c.id}','${t.id}')" title="Click to cycle status">${statusIcon(t.status)}</button>
+        <div class="topic-body">
+          <div class="topic-text ${t.status==='done'?'done':''}">${esc(t.text)}</div>
+          <div class="topic-chips">
+            <span class="chip ${statusChip(t.status)}">${statusLabel(t.status)}</span>
+            ${t.notes?'<span class="chip chip-note">📝 note</span>':''}
+          </div>
+          ${t.expanded?`<textarea class="note-input" rows="2" placeholder="Add a note…" onchange="saveNote('${sid}','${c.id}','${t.id}',this.value)">${esc(t.notes)}</textarea>`:(t.notes?`<div class="topic-note">${esc(t.notes)}</div>`:'')}
+        </div>
+        <div class="topic-actions">
+          <button class="icon-btn" onclick="doExpand('${sid}','${c.id}','${t.id}')" title="Note">📝</button>
+          <button class="icon-btn danger" onclick="doDelete('${sid}','${c.id}','${t.id}')" title="Delete">✕</button>
+        </div>
+      </div>`).join('');
+    return `<div class="cat-block">
+      <div class="cat-head">
+        <span class="cat-name">${esc(c.name)}</span>
+        <div class="cat-pbar"><div class="cat-pfill" style="width:${cp}%"></div></div>
+        <span class="cat-ct">${cd}/${c.topics.length}</span>
+        <button class="btn-del-cat" onclick="deleteCat('${sid}','${c.id}')">✕</button>
+      </div>
+      ${rows}
+      <div class="add-row">
+        <input class="add-input" id="ti-${c.id}" placeholder="Add topic…" onkeydown="if(event.key==='Enter')addTopic('${sid}','${c.id}')">
+        <select class="add-select" id="ts-${c.id}">
+          <option value="todo">To do</option><option value="inprogress">In progress</option><option value="done">Done</option>
+        </select>
+        <button class="btn-add" onclick="addTopic('${sid}','${c.id}')">＋ Add</button>
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('main').innerHTML=`
+    <div class="sec-header">
+      <div class="sec-title-wrap">
+        <div class="sec-badge" style="background:${s.color.bg}">${s.emoji}</div>
+        <div><div class="sec-name">${esc(s.name)}</div>
+          <div class="sec-meta">${t.length} topics · ${done} completed · ${s.categories.length} categories</div></div>
+      </div>
+      <button class="btn-danger" onclick="deleteSector('${sid}')">✕ Remove</button>
+    </div>
+    <div class="prog-strip">
+      <span class="prog-label">${esc(s.name)} progress</span>
+      <div class="prog-track"><div class="prog-fill" style="width:${p}%"></div></div>
+      <span class="prog-pct">${p}%</span>
+    </div>
+    ${catsHtml}
+    <div class="add-cat-row">
+      <input class="add-input" id="ci-${sid}" placeholder="New category name…" style="max-width:240px" onkeydown="if(event.key==='Enter')addCat('${sid}')">
+      <button class="btn-add" onclick="addCat('${sid}')">＋ Add category</button>
+    </div>`;
+}
+
+// ── CALENDAR STATE ───────────────────────────────────────────────────
+const CAL_MONTHS=[
+  {name:'June 2026',startDay:1,days:30},
+  {name:'July 2026',startDay:3,days:31},
+  {name:'August 2026',startDay:6,days:31},
+  {name:'September 2026',startDay:2,days:30},
+];
+const CAL_TYPE={
+  work:      {label:'Egypt (work)',        bg:'#EBF4FB',color:'#1F4E79',border:'#2E75B6'},
+  remote:    {label:'Remote Germany',      bg:'#E2EFDA',color:'#375623',border:'#70AD47'},
+  leave:     {label:'Annual leave',        bg:'#FFF2CC',color:'#7F6000',border:'#FFC000'},
+  'ot-leave':{label:'Compensatory leave',  bg:'#FAEEDA',color:'#854F0B',border:'#ED7D31'},
+  moving:    {label:'Moving day',          bg:'#F4CCFF',color:'#6B0D8A',border:'#AA00FF'},
+  holiday:   {label:'Weekend',             bg:'#F4F4F4',color:'#AAAAAA',border:'#CCCCCC'},
+  national:  {label:'National holiday',    bg:'#FCE4D6',color:'#843C0C',border:'#C55A11'},
+};
+const CAL_CYCLE=['work','remote','leave','ot-leave','moving','national','holiday'];
+
+// default event data
+const CAL_DEFAULT={
+  'June 2026':{1:'work',2:'work',3:'work',4:'work',5:'holiday',6:'holiday',7:'work',8:'work',9:'work',10:'work',11:'work',12:'holiday',13:'holiday',14:'work',15:'work',16:'work',17:'work',18:'work',19:'holiday',20:'holiday',21:'work',22:'work',23:'work',24:'work',25:'leave',26:'holiday',27:'holiday',28:'ot-leave',29:'ot-leave',30:'ot-leave'},
+  'July 2026':{1:'leave',2:'leave',3:'holiday',4:'holiday',5:'leave',6:'leave',7:'leave',8:'leave',9:'leave',10:'holiday',11:'holiday',12:'work',13:'work',14:'work',15:'work',16:'work',17:'holiday',18:'holiday',19:'work',20:'work',21:'work',22:'work',23:'national',24:'holiday',25:'holiday',26:'work',27:'work',28:'work',29:'moving',30:'moving',31:'holiday'},
+  'August 2026':{1:'holiday',2:'work',3:'work',4:'work',5:'leave',6:'remote',7:'holiday',8:'holiday',9:'remote',10:'remote',11:'remote',12:'remote',13:'remote',14:'holiday',15:'holiday',16:'leave',17:'leave',18:'leave',19:'leave',20:'leave',21:'holiday',22:'holiday',23:'leave',24:'leave',25:'leave',26:'leave',27:'national',28:'holiday',29:'holiday',30:'remote',31:'remote'},
+  'September 2026':{1:'remote',2:'remote',3:'remote',4:'holiday',5:'holiday',6:'remote',7:'remote',8:'remote',9:'remote',10:'remote',11:'holiday',12:'holiday',13:'leave',14:'leave',15:'leave',16:'leave',17:'leave',18:'holiday',19:'holiday',20:'work',21:'leave',22:'leave',23:'leave',24:'leave',25:'holiday',26:'holiday',27:'leave',28:'ot-leave',29:'ot-leave',30:'ot-leave'},
+};
+
+// load saved calendar overrides or use defaults
+if(!state.calEvents){
+  state.calEvents={};
+  Object.keys(CAL_DEFAULT).forEach(m=>{ state.calEvents[m]=Object.assign({},CAL_DEFAULT[m]); });
+}
+
+function calCycleDay(monthName, day){
+  const cur=state.calEvents[monthName][day]||'work';
+  const idx=CAL_CYCLE.indexOf(cur);
+  state.calEvents[monthName][day]=CAL_CYCLE[(idx+1)%CAL_CYCLE.length];
+  saveState();
+  renderCalendar();
+}
+
+function renderCalendar(){
+  const DAYS=['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+  // recount from current state
+  const counts={remote:0,leave:0,'ot-leave':0,moving:0};
+  Object.values(state.calEvents).forEach(mo=>Object.values(mo).forEach(t=>{if(counts[t]!==undefined)counts[t]++;}));
+
+  const calHtml=CAL_MONTHS.map(mo=>{
+    const evts=state.calEvents[mo.name]||{};
+    let cells='';
+    for(let i=0;i<mo.startDay;i++) cells+=`<div class="cal-cell cal-empty"></div>`;
+    for(let d=1;d<=mo.days;d++){
+      const type=evts[d]||'work';
+      const s=CAL_TYPE[type]||CAL_TYPE.work;
+      cells+=`<div class="cal-cell" style="background:${s.bg};border-color:${s.border};cursor:pointer;transition:transform .1s,box-shadow .1s"
+        onclick="calCycleDay('${mo.name}',${d})"
+        onmouseover="this.style.transform='scale(1.15)';this.style.boxShadow='0 2px 8px rgba(0,0,0,.15)';this.style.zIndex='10'"
+        onmouseout="this.style.transform='';this.style.boxShadow='';this.style.zIndex=''"
+        title="Click to change: ${s.label}">
+        <span class="cal-num" style="color:${s.color}">${d}</span>
+      </div>`;
+    }
+    return `<div class="cal-month">
+      <div class="cal-month-name">${mo.name}</div>
+      <div class="cal-grid">${DAYS.map(d=>`<div class="cal-day-label">${d}</div>`).join('')}${cells}</div>
+    </div>`;
+  }).join('');
+
+  const legendHtml=Object.entries(CAL_TYPE).map(([k,v])=>
+    `<div class="leg-item" style="cursor:pointer" title="Click a tile to cycle to this category">
+      <span class="leg-dot" style="background:${v.bg};border:1.5px solid ${v.border}"></span>
+      <span style="font-size:11px;color:#595959">${v.label}</span>
+    </div>`
+  ).join('');
+
+  document.getElementById('main').innerHTML=`
+    <div style="margin-bottom:1.25rem">
+      <h1 style="font-size:20px;font-weight:700">Egypt → Germany Transition Calendar</h1>
+      <p style="font-size:12px;color:#6B6B6B;margin-top:2px">June – September 2026 · Click any day to change its category</p>
+    </div>
+    <div class="stat-grid">
+      <div class="stat-card"><div class="stat-label">Remote Germany</div><div class="stat-value" style="color:#375623">${counts.remote}</div><div class="stat-sub">days</div></div>
+      <div class="stat-card"><div class="stat-label">Annual leave</div><div class="stat-value" style="color:#7F6000">${counts.leave}</div><div class="stat-sub">days</div></div>
+      <div class="stat-card"><div class="stat-label">Compensatory leave</div><div class="stat-value" style="color:#854F0B">${counts['ot-leave']}</div><div class="stat-sub">days</div></div>
+      <div class="stat-card"><div class="stat-label">Moving days</div><div class="stat-value" style="color:#6B0D8A">${counts.moving}</div><div class="stat-sub">days</div></div>
+    </div>
+    <div class="leg-row" style="align-items:center">
+      <span style="font-size:11px;font-weight:600;color:#6B6B6B;margin-right:4px">Click tile to cycle →</span>
+      ${legendHtml}
+    </div>
+    <div class="cal-wrapper">${calHtml}</div>`;
+}
+
+function setActive(id){state.active=id;render();}
+function doToggle(sid,cid,tid){const t=getTopic(sid,cid,tid);t.status=nextStatus(t.status);render();}
+function doExpand(sid,cid,tid){const t=getTopic(sid,cid,tid);t.expanded=!t.expanded;render();}
+function doDelete(sid,cid,tid){const c=getCat(sid,cid);c.topics=c.topics.filter(t=>t.id!==tid);render();}
+function saveNote(sid,cid,tid,val){getTopic(sid,cid,tid).notes=val;saveState();}
+function addTopic(sid,cid){
+  const inp=document.getElementById('ti-'+cid),sel=document.getElementById('ts-'+cid);
+  if(!inp||!inp.value.trim())return;
+  getCat(sid,cid).topics.push({id:uid(),text:inp.value.trim(),status:sel?sel.value:'todo',notes:'',expanded:false});
+  render();
+}
+function addCat(sid){
+  const inp=document.getElementById('ci-'+sid);
+  if(!inp||!inp.value.trim())return;
+  getSector(sid).categories.push({id:uid(),name:inp.value.trim(),topics:[]});
+  render();
+}
+function deleteSector(sid){
+  if(!confirm('Remove this sector and all its topics?'))return;
+  state.sectors=state.sectors.filter(s=>s.id!==sid);
+  state.active='overview';render();
+}
+function deleteCat(sid,cid){
+  if(!confirm('Remove this category?'))return;
+  getSector(sid).categories=getSector(sid).categories.filter(c=>c.id!==cid);
+  render();
+}
+function openModal(){document.getElementById('modal').classList.add('open');setTimeout(()=>document.getElementById('modal-input').focus(),50);}
+function closeModal(){document.getElementById('modal').classList.remove('open');document.getElementById('modal-input').value='';}
+function confirmAddSector(){
+  const name=document.getElementById('modal-input').value.trim();if(!name)return;
+  const idx=state.sectors.length;
+  state.sectors.push({id:uid(),name,emoji:SECTOR_EMOJIS[idx%SECTOR_EMOJIS.length],color:SECTOR_COLORS[idx%SECTOR_COLORS.length],
+    categories:[
+      {id:uid(),name:'Institutional handover',topics:[{id:uid(),text:'MoU with ETF',status:'todo',notes:'',expanded:false},{id:uid(),text:'Sector competence development strategy',status:'todo',notes:'',expanded:false}]},
+      {id:uid(),name:'Short-term trainings',topics:[{id:uid(),text:'Training calendar finalised',status:'todo',notes:'',expanded:false}]},
+    ]});
+  state.active=state.sectors[state.sectors.length-1].id;
+  closeModal();render();
+}
+function exportJSON(){
+  const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+  a.download='TCTI_Handover_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+}
+function handleImport(e){
+  const f=e.target.files[0];if(!f)return;
+  const r=new FileReader();
+  r.onload=ev=>{try{state=JSON.parse(ev.target.result);render();}catch{alert('Invalid file.');}};
+  r.readAsText(f);e.target.value='';
+}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+document.getElementById('modal').addEventListener('click',e=>{if(e.target===document.getElementById('modal'))closeModal();});
+render();
+</script>
+</body>
+</html>
