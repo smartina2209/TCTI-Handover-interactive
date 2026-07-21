@@ -1,0 +1,1003 @@
+{
+  "active": "id2059",
+  "sectors": [
+    {
+      "id": "s1",
+      "name": "Tourism",
+      "emoji": "🏨",
+      "color": {
+        "bg": "#EBF4FB",
+        "icon": "#1F4E79"
+      },
+      "categories": [
+        {
+          "id": "c1",
+          "name": "Institutional handover",
+          "topics": [
+            {
+              "id": "t1",
+              "text": "MoU with ETF",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t2",
+              "text": "Sector competence development strategy",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2009",
+              "text": "upload in core",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "c2",
+          "name": "Short-term trainings",
+          "topics": [
+            {
+              "id": "t3",
+              "text": "Training calendar finalised with MoETE",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t4",
+              "text": "Trainer handover sessions completed",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t5",
+              "text": "Training materials transferred to counterpart",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2010",
+              "text": "photos",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2085",
+              "text": "upload in core",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2088",
+          "name": "integration in TELM activities",
+          "topics": [
+            {
+              "id": "id2089",
+              "text": "handover of ETF MoU and SCDS to TCTI 2 colleagues",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2090",
+              "text": "integration of RPL Bleeker documents in TCTI 2 activities",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2091",
+              "text": "roadmap for PS integration in tourism",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2110",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "name": "Construction",
+      "emoji": "🏗",
+      "color": {
+        "bg": "#EAF3DE",
+        "icon": "#3B6D11"
+      },
+      "categories": [
+        {
+          "id": "c3",
+          "name": "Institutional handover",
+          "topics": [
+            {
+              "id": "t7",
+              "text": "Sector competence development strategy",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2008",
+              "text": "MoU ABA/Arab Contractors",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "c4",
+          "name": "Short-term trainings",
+          "topics": [
+            {
+              "id": "t8",
+              "text": "Training calendar finalised with MoETE",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t9",
+              "text": "Trainer handover sessions completed",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t10",
+              "text": "Training materials transferred to counterpart",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2106",
+          "name": "internal GIZ handover",
+          "topics": [
+            {
+              "id": "id2107",
+              "text": "initial conversation with CBUID",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2108",
+              "text": "follow up with Monica and CBUID team on contacts and entry points",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2111",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "name": "Woodworking",
+      "emoji": "🪵",
+      "color": {
+        "bg": "#FAEEDA",
+        "icon": "#854F0B"
+      },
+      "categories": [
+        {
+          "id": "c5",
+          "name": "Institutional handover",
+          "topics": [
+            {
+              "id": "t12",
+              "text": "Sector competence development strategy",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2007",
+              "text": "MoU with CWWFI",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "c6",
+          "name": "Short-term trainings",
+          "topics": [
+            {
+              "id": "t13",
+              "text": "Training calendar finalised with MoETE",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t14",
+              "text": "Trainer handover sessions completed",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2094",
+              "text": "training materials handed over to partners",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2112",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "name": "Food processing",
+      "emoji": "🍞",
+      "color": {
+        "bg": "#FAECE7",
+        "icon": "#993C1D"
+      },
+      "categories": [
+        {
+          "id": "c7",
+          "name": "Institutional handover",
+          "topics": [
+            {
+              "id": "t16",
+              "text": "Sector competence development strategy",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2006",
+              "text": "MoU with CFI",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "c8",
+          "name": "Short-term trainings",
+          "topics": [
+            {
+              "id": "t17",
+              "text": "Training calendar finalised with MoETE",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "t18",
+              "text": "Trainer handover sessions completed",
+              "status": "done",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2095",
+              "text": "training materials handed over to partners",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2113",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id2000",
+      "name": "TVETA",
+      "emoji": "👗",
+      "color": {
+        "bg": "#EEEDFE",
+        "icon": "#534AB7"
+      },
+      "categories": [
+        {
+          "id": "id2096",
+          "name": "review documents uploaded in sharepoint with Menna",
+          "topics": [
+            {
+              "id": "id2097",
+              "text": "documents revised and to be reviewed",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2109",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id2011",
+      "name": "grassroots engagement",
+      "emoji": "🚛",
+      "color": {
+        "bg": "#E1F5EE",
+        "icon": "#0F6E56"
+      },
+      "categories": [
+        {
+          "id": "id2012",
+          "name": "Institutional handover",
+          "topics": [
+            {
+              "id": "id2017",
+              "text": "assessment report",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2018",
+              "text": "grassroots engagement manual",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2019",
+              "text": "raw graphics for GTA",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2020",
+              "text": "photos from events",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2021",
+              "text": "upload all in CORE",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2092",
+          "name": "integration of grassroots findings in EPP",
+          "topics": [
+            {
+              "id": "id2093",
+              "text": "sharing of documents and presentation to team",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2114",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id2022",
+      "name": "Database",
+      "emoji": "💻",
+      "color": {
+        "bg": "#FBEAF0",
+        "icon": "#993556"
+      },
+      "categories": [
+        {
+          "id": "id2028",
+          "name": "tourism sector companies",
+          "topics": []
+        },
+        {
+          "id": "id2029",
+          "name": "construction sector companies",
+          "topics": []
+        },
+        {
+          "id": "id2030",
+          "name": "wood working sector companies",
+          "topics": []
+        },
+        {
+          "id": "id2031",
+          "name": "food processing companies",
+          "topics": []
+        },
+        {
+          "id": "id2115",
+          "name": "governance system within GIZ",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id2032",
+      "name": "renovation",
+      "emoji": "🤝",
+      "color": {
+        "bg": "#F1EFE8",
+        "icon": "#5F5E5A"
+      },
+      "categories": [
+        {
+          "id": "id2038",
+          "name": "Alexandria Thalaat Harb",
+          "topics": [
+            {
+              "id": "id2043",
+              "text": "final report",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2048",
+              "text": "preparation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2069",
+              "text": "implementation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2039",
+          "name": "Beheira el Bayda school",
+          "topics": [
+            {
+              "id": "id2044",
+              "text": "final report",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2049",
+              "text": "preparation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2068",
+              "text": "implementation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2040",
+          "name": "Damietta New Damietta Military school",
+          "topics": [
+            {
+              "id": "id2045",
+              "text": "final report",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2050",
+              "text": "preparation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2067",
+              "text": "implementation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2041",
+          "name": "Hurghada Ahmed Orabi school",
+          "topics": [
+            {
+              "id": "id2046",
+              "text": "final report",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2051",
+              "text": "preparation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2066",
+              "text": "implementation phase",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2042",
+          "name": "overall procurement report",
+          "topics": [
+            {
+              "id": "id2047",
+              "text": "final report",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2065",
+              "text": "uploaded in Core",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2116",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id2053",
+      "name": "invoices",
+      "emoji": "🏥",
+      "color": {
+        "bg": "#EBF4FB",
+        "icon": "#1F4E79"
+      },
+      "categories": [
+        {
+          "id": "id2099",
+          "name": "ICON 1 invoices uploaded",
+          "topics": [
+            {
+              "id": "id2101",
+              "text": "invoices paid",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2100",
+          "name": "ICON 2 invoices uploaded",
+          "topics": [
+            {
+              "id": "id2102",
+              "text": "invoices pai",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2103",
+          "name": "GZK Bleeker invoice",
+          "topics": []
+        },
+        {
+          "id": "id2117",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id2059",
+      "name": "reporting",
+      "emoji": "🎓",
+      "color": {
+        "bg": "#EAF3DE",
+        "icon": "#3B6D11"
+      },
+      "categories": [
+        {
+          "id": "id2070",
+          "name": "BMZ reporting",
+          "topics": [
+            {
+              "id": "id2104",
+              "text": "draft developed",
+              "status": "inprogress",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2105",
+              "text": "reviewed and finalised",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2071",
+          "name": "SDC reporting",
+          "topics": []
+        },
+        {
+          "id": "id2072",
+          "name": "MoETE reporting",
+          "topics": []
+        },
+        {
+          "id": "id2073",
+          "name": "ICON progress reports catalogue",
+          "topics": [
+            {
+              "id": "id2074",
+              "text": "ICON final report",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id2075",
+              "text": "reviewed",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id2118",
+          "name": "uploaded in core",
+          "topics": []
+        },
+        {
+          "id": "id3017",
+          "name": "central project evaluation",
+          "topics": [
+            {
+              "id": "id3018",
+              "text": "stakeholder maps",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3019",
+              "text": "data sources",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3020",
+              "text": "relevant email documentation",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3021",
+              "text": "sector analysis",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3022",
+              "text": "steering structure",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3023",
+              "text": "find results model",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "id2077",
+      "name": "communication",
+      "emoji": "🏨",
+      "color": {
+        "bg": "#FAEEDA",
+        "icon": "#854F0B"
+      },
+      "categories": [
+        {
+          "id": "id2083",
+          "name": "posts for linkedin",
+          "topics": []
+        },
+        {
+          "id": "id2084",
+          "name": "posts for facebook",
+          "topics": []
+        },
+        {
+          "id": "id2119",
+          "name": "uploaded in core",
+          "topics": []
+        }
+      ]
+    },
+    {
+      "id": "id3000",
+      "name": "knowledge management",
+      "emoji": "🏨",
+      "color": {
+        "bg": "#FAECE7",
+        "icon": "#993C1D"
+      },
+      "categories": [
+        {
+          "id": "id3006",
+          "name": "sector competence development strategies",
+          "topics": []
+        },
+        {
+          "id": "id3007",
+          "name": "mapping of sectors",
+          "topics": [
+            {
+              "id": "id3008",
+              "text": "tourism",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3009",
+              "text": "construction",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3010",
+              "text": "food processing",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3011",
+              "text": "wood working/furniture",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        },
+        {
+          "id": "id3012",
+          "name": "the namibian experience",
+          "topics": []
+        },
+        {
+          "id": "id3013",
+          "name": "stakeholder identification",
+          "topics": []
+        },
+        {
+          "id": "id3014",
+          "name": "competence based curricula",
+          "topics": [
+            {
+              "id": "id3015",
+              "text": "programme framework",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            },
+            {
+              "id": "id3016",
+              "text": "occupational standards",
+              "status": "todo",
+              "notes": "",
+              "expanded": false
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "calEvents": {
+    "June 2026": {
+      "1": "work",
+      "2": "work",
+      "3": "work",
+      "4": "work",
+      "5": "holiday",
+      "6": "holiday",
+      "7": "work",
+      "8": "work",
+      "9": "work",
+      "10": "work",
+      "11": "work",
+      "12": "holiday",
+      "13": "holiday",
+      "14": "work",
+      "15": "work",
+      "16": "work",
+      "17": "work",
+      "18": "work",
+      "19": "holiday",
+      "20": "holiday",
+      "21": "work",
+      "22": "work",
+      "23": "work",
+      "24": "work",
+      "25": "leave",
+      "26": "holiday",
+      "27": "holiday",
+      "28": "ot-leave",
+      "29": "ot-leave",
+      "30": "ot-leave"
+    },
+    "July 2026": {
+      "1": "leave",
+      "2": "leave",
+      "3": "holiday",
+      "4": "holiday",
+      "5": "leave",
+      "6": "leave",
+      "7": "leave",
+      "8": "remote",
+      "9": "remote",
+      "10": "holiday",
+      "11": "holiday",
+      "12": "work",
+      "13": "work",
+      "14": "work",
+      "15": "work",
+      "16": "work",
+      "17": "holiday",
+      "18": "holiday",
+      "19": "work",
+      "20": "work",
+      "21": "work",
+      "22": "work",
+      "23": "national",
+      "24": "holiday",
+      "25": "holiday",
+      "26": "work",
+      "27": "work",
+      "28": "work",
+      "29": "work",
+      "30": "work",
+      "31": "holiday"
+    },
+    "August 2026": {
+      "1": "holiday",
+      "2": "work",
+      "3": "work",
+      "4": "work",
+      "5": "work",
+      "6": "leave",
+      "7": "holiday",
+      "8": "holiday",
+      "9": "leave",
+      "10": "leave",
+      "11": "leave",
+      "12": "leave",
+      "13": "leave",
+      "14": "holiday",
+      "15": "holiday",
+      "16": "leave",
+      "17": "leave",
+      "18": "leave",
+      "19": "leave",
+      "20": "leave",
+      "21": "holiday",
+      "22": "holiday",
+      "23": "remote",
+      "24": "remote",
+      "25": "remote",
+      "26": "remote",
+      "27": "national",
+      "28": "holiday",
+      "29": "holiday",
+      "30": "moving",
+      "31": "moving"
+    },
+    "September 2026": {
+      "1": "remote",
+      "2": "remote",
+      "3": "remote",
+      "4": "holiday",
+      "5": "holiday",
+      "6": "remote",
+      "7": "remote",
+      "8": "remote",
+      "9": "remote",
+      "10": "remote",
+      "11": "holiday",
+      "12": "holiday",
+      "13": "remote",
+      "14": "remote",
+      "15": "remote",
+      "16": "remote",
+      "17": "remote",
+      "18": "holiday",
+      "19": "holiday",
+      "20": "leave",
+      "21": "leave",
+      "22": "leave",
+      "23": "leave",
+      "24": "leave",
+      "25": "holiday",
+      "26": "holiday",
+      "27": "work",
+      "28": "work",
+      "29": "work",
+      "30": "work"
+    }
+  }
+}
